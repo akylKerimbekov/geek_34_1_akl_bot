@@ -21,6 +21,11 @@ async def questionnaire_one_keyboard():
         "No",
         callback_data="hungry_no"
     )
+    result_button = InlineKeyboardButton(
+        "Result",
+        callback_data="hungry_result"
+    )
     markup.add(yes_button)
     markup.add(no_button)
+    markup.add(result_button)
     return markup
