@@ -16,6 +16,7 @@ class Database:
         self.connection.execute(sql_queries.CREATE_BAN_USER_TABLE_QUERY)
         self.connection.execute(sql_queries.CREATE_USER_FORM_TABLE_QUERY)
         self.connection.execute(sql_queries.CREATE_LIKE_TABLE_QUERY)
+        self.connection.execute(sql_queries.CREATE_COMPLAIN_TABLE_QUERY)
 
     def sql_insert_user_query(self, telegram_id, username, first_name, last_name):
         self.cursor.execute(
@@ -97,5 +98,12 @@ class Database:
         self.cursor.execute(
             sql_queries.UPDATE_USER_FORM_QUERY,
             (nickname, bio, age, occupation, photo, telegram_id, )
+        )
+        self.connection.commit()
+
+    def sql_insert_complain_query(self, owner_telegram_id, complainer_telegram_id):
+        self.cursor.execute(
+            sql_queries.INSERT_COMPLAIN_QUERY,
+            (None, owner_telegram_id, complainer_telegram_id, )
         )
         self.connection.commit()

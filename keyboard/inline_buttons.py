@@ -61,8 +61,13 @@ async def like_dislike_keyboard(owner_tg_id):
         "Dislike",
         callback_data="random_profile"
     )
+    complain_button = InlineKeyboardButton(
+        "Complain",
+        callback_data=f"user_form_complain_{owner_tg_id}"
+    )
     markup.add(like_button)
     markup.add(dislike_button)
+    markup.add(complain_button)
     return markup
 
 

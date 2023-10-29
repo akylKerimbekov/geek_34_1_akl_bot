@@ -41,6 +41,19 @@ CREATE_LIKE_TABLE_QUERY = """
     )
 """
 
+CREATE_COMPLAIN_TABLE_QUERY = """
+    create table if not exists complain_user(
+        id integer primary key,
+        owner_telegram_id integer,
+        complainer_telegram_id integer,
+        unique (owner_telegram_id, complainer_telegram_id)
+    )
+"""
+
+INSERT_COMPLAIN_QUERY = """
+    insert into complain_user values (?, ?, ?)
+"""
+
 INSERT_USER_QUERY = """
     insert or ignore into telegram_users values (?, ?, ?, ?, ?)
 """

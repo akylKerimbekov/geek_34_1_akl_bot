@@ -180,9 +180,7 @@ async def random_profiles_call(call: types.CallbackQuery):
 
 
 async def like_detect_call(call: types.CallbackQuery):
-    print(call.data)
     owner_tg_id = re.sub("user_form_like_", "", call.data)
-    print(call.data)
     try:
         Database().sql_insert_like_query(
             owner_telegram_id=owner_tg_id,
@@ -192,6 +190,26 @@ async def like_detect_call(call: types.CallbackQuery):
         await bot.send_message(
             chat_id=call.from_user.id,
             text="You already liked"
+        )
+    finally:
+        await random_profiles_call(call=call)
+
+
+async def complain_user_call(call: types.CallbackQuery):
+    owner_tg_id = re.sub("user_form_complain_", "", call.data)
+    try:
+        Database().sql_insert_complain_query(
+            owner_telegram_id=owner_tg_id,
+            complainer_telegram_id=call.from_user.id
+        )
+        await bot.send_message(
+            chat_id=owner_tg_id,
+            text="You are in complain list"
+        )
+    except sqlite3.IntegrityError as e:
+        await bot.send_message(
+            chat_id=call.from_user.id,
+            text="You already complained"
         )
     finally:
         await random_profiles_call(call=call)
@@ -222,4 +240,6 @@ def register_fsm_form_handlers(dp: Dispatcher):
     dp.register_callback_query_handler(like_detect_call,
                                        lambda call: "user_form_like_" in call.data)
     dp.register_callback_query_handler(delete_user_form_call,
-                                       lambda call: "delete_user_form" == call.data)
+                                       lambda call: call.data == "delete_user_form")
+    dp.register_callback_query_handler(complain_user_call,
+                                      lambda call: "user_form_complain_" in call.data)
