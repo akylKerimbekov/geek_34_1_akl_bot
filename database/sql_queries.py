@@ -32,6 +32,15 @@ CREATE_USER_FORM_TABLE_QUERY = """
     )
 """
 
+CREATE_LIKE_TABLE_QUERY = """
+    create table if not exists like_user(
+        id integer primary key,
+        owner_telegram_id integer,
+        liker_telegram_id integer,
+        unique (owner_telegram_id, liker_telegram_id)
+    )
+"""
+
 INSERT_USER_QUERY = """
     insert or ignore into telegram_users values (?, ?, ?, ?, ?)
 """
@@ -46,10 +55,28 @@ INSERT_USER_FORM_QUERY = """
     insert into user_forms(id, telegram_id, nickname, bio, age, occupation, photo) values (?, ?, ?, ?, ?, ?, ?)
 """
 
+DELETE_USER_FORM_QUERY = """
+    delete from user_forms where telegram_id = ?
+"""
+
+UPDATE_USER_FORM_QUERY = """
+    update user_forms 
+    set nickname = ?, bio = ?, age = ?, occupation = ?, photo = ?
+    where telegram_id = ?
+"""
+
 SELECT_ALL_USER_QUERY = """
     select * from telegram_users
 """
 
 SELECT_USER_FORM_QUERY = """
     select * from user_forms where telegram_id = ?
+"""
+
+SELECT_ALL_USER_FORM_QUERY = """
+    select * from user_forms
+"""
+
+INSERT_LIKE_QUERY = """
+    insert into like_user(id, owner_telegram_id, liker_telegram_id) values (?, ?, ?)
 """
