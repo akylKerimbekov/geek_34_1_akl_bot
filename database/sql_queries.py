@@ -32,3 +32,7 @@ INSERT_BAN_USER_QUERY = """
 SELECT_ALL_USER_QUERY = """
     select * from telegram_users
 """
+
+SELECT_BAN_USER_QUERY = """
+    select count from ban_users where telegram_id = ?
+"""

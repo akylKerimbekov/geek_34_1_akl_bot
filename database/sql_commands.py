@@ -40,3 +40,12 @@ class Database:
             (None, telegram_id, username, 1,)
         )
         self.connection.commit()
+
+    def sql_select_ban_user_query(self, telegram_id):
+        self.cursor.row_factory = lambda cursor, row: {
+            "count": row[0],
+        }
+        return self.cursor.execute(
+            sql_queries.SELECT_BAN_USER_QUERY,
+            (telegram_id,)
+        ).fetchall()
