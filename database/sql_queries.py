@@ -55,6 +55,34 @@ CREATE_REFERENCE_TABLE_QUERY = """
     )
 """
 
+CREATE_NEWS_TABLE_QUERY = """
+    create table if not exists news(
+        id integer primary key,
+        owner_telegram_id integer,
+        title text,
+        href text,
+        is_favorite integer default 0
+    )
+"""
+
+INSERT_NEWS_QUERY = """
+    insert into news values (?, ?, ?, ?, ?)
+    returning *
+"""
+
+UPDATE_FAV_NEWS_QUERY = """
+    update news set is_favorite = 1
+    where id = ?
+"""
+
+SELECT_ALL_FAV_NEWS_QUERY = """
+    select * from news where is_favorite = 1 and owner_telegram_id = ?
+"""
+
+INSERT_FAV_NEWS_QUERY = """
+    insert into fav_news values (?, ?, ?, ?)
+"""
+
 INSERT_USER_QUERY = """
     insert or ignore into telegram_users values (?, ?, ?, ?, ?, ?)
 """

@@ -23,11 +23,21 @@ async def start_keyboard():
         "Referral Menu",
         callback_data="reference_menu"
     )
+    news_list_menu_button = InlineKeyboardButton(
+        "News",
+        callback_data="news_list_menu"
+    )
+    fav_news_list_menu_button = InlineKeyboardButton(
+        "Favorite News",
+        callback_data="fav_news_list_menu"
+    )
     markup.add(questionnaire_button)
     markup.add(registration_button)
     markup.add(profile_button)
     markup.add(random_profile_button)
     markup.add(reference_menu_button)
+    markup.add(news_list_menu_button)
+    markup.add(fav_news_list_menu_button)
     return markup
 
 
@@ -108,4 +118,14 @@ async def reference_menu_keyboard():
     )
     markup.add(reference_link_button)
     markup.add(reference_list_button)
+    return markup
+
+
+async def news_menu_keyboard(news_id):
+    markup = InlineKeyboardMarkup()
+    news_link_button = InlineKeyboardButton(
+        "Save",
+        callback_data=f"update_news_link_{news_id}"
+    )
+    markup.add(news_link_button)
     return markup
