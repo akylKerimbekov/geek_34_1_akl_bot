@@ -9,6 +9,11 @@ CREATE_USER_TABLE_QUERY = """
     )
 """
 
+ALTER_USER_TABLE = """
+alter table telegram_users
+add column reference_link text
+"""
+
 CREATE_BAN_USER_TABLE_QUERY = """
     create table if not exists ban_users(
         id integer primary key,
@@ -41,8 +46,21 @@ CREATE_LIKE_TABLE_QUERY = """
     )
 """
 
+CREATE_REFERENCE_TABLE_QUERY = """
+    create table if not exists referral(
+        id integer primary key,
+        owner_telegram_id integer,
+        referral_telegram_id integer,
+        unique (owner_telegram_id, referral_telegram_id)
+    )
+"""
+
 INSERT_USER_QUERY = """
-    insert or ignore into telegram_users values (?, ?, ?, ?, ?)
+    insert or ignore into telegram_users values (?, ?, ?, ?, ?, ?)
+"""
+
+UPDATE_USER_REF_QUERY = """
+    update telegram_users set reference_link = ? where telegram_id = ?
 """
 
 INSERT_BAN_USER_QUERY = """
@@ -69,6 +87,14 @@ SELECT_ALL_USER_QUERY = """
     select * from telegram_users
 """
 
+SELECT_USER_QUERY = """
+    select * from telegram_users where telegram_id = ?
+"""
+
+SELECT_USER_BY_LINK_QUERY = """
+    select * from telegram_users where reference_link = ?
+"""
+
 SELECT_USER_FORM_QUERY = """
     select * from user_forms where telegram_id = ?
 """
@@ -79,4 +105,12 @@ SELECT_ALL_USER_FORM_QUERY = """
 
 INSERT_LIKE_QUERY = """
     insert into like_user(id, owner_telegram_id, liker_telegram_id) values (?, ?, ?)
+"""
+
+INSERT_REFERRAL_QUERY = """
+    insert into referral(id, owner_telegram_id, referral_telegram_id) values (?, ?, ?)
+"""
+
+SELECT_ALL_REFERRAL_BY_OWNER_QUERY = """
+    select * from referral where owner_telegram_id = ?
 """
