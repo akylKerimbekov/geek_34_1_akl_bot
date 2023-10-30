@@ -106,6 +106,11 @@ async def reference_menu_keyboard():
         "Referral List",
         callback_data="reference_list"
     )
+    wallet_balance_button = InlineKeyboardButton(
+        "Wallet Balance",
+        callback_data="wallet_balance"
+    )
     markup.add(reference_link_button)
     markup.add(reference_list_button)
+    markup.add(wallet_balance_button)
     return markup

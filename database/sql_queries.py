@@ -55,6 +55,39 @@ CREATE_REFERENCE_TABLE_QUERY = """
     )
 """
 
+CREATE_WALLET_TABLE_QUERY = """
+    create table if not exists wallet(
+        id integer primary key,
+        owner_telegram_id integer,
+        balance integer,
+        unique (owner_telegram_id)
+    )
+"""
+
+CREATE_REFERRAL_BONUS_TABLE_QUERY = """
+    create table if not exists referral_bonus(
+        id integer primary key,
+        to_telegram_id integer,
+        from_telegram_id integer,
+        amount integer,
+        unique (to_telegram_id, from_telegram_id)
+    )
+"""
+
+INSERT_WALLET_QUERY = """
+    insert into wallet values (:id, :owner_telegram_id, :balance)
+    on conflict(owner_telegram_id)
+    do update set balance = balance + :balance
+"""
+
+SELECT_WALLET_BALANCE_BY_OWNER_QUERY = """
+    select * from wallet where owner_telegram_id = ?
+"""
+
+INSERT_REFERRAL_BONUS_QUERY = """
+    insert or ignore into referral_bonus values (?, ?, ?, ?)
+"""
+
 INSERT_USER_QUERY = """
     insert or ignore into telegram_users values (?, ?, ?, ?, ?, ?)
 """

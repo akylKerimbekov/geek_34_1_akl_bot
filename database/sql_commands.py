@@ -17,6 +17,8 @@ class Database:
         self.connection.execute(sql_queries.CREATE_USER_FORM_TABLE_QUERY)
         self.connection.execute(sql_queries.CREATE_LIKE_TABLE_QUERY)
         self.connection.execute(sql_queries.CREATE_REFERENCE_TABLE_QUERY)
+        self.connection.execute(sql_queries.CREATE_WALLET_TABLE_QUERY)
+        self.connection.execute(sql_queries.CREATE_REFERRAL_BONUS_TABLE_QUERY)
         try:
             self.connection.execute(sql_queries.ALTER_USER_TABLE)
         except sqlite3.OperationalError as e:
@@ -157,4 +159,24 @@ class Database:
             sql_queries.INSERT_REFERRAL_QUERY,
             (None, owner_telegram_id, referral_telegram_id, )
         )
+        bonus = 100
+        self.cursor.execute(
+            sql_queries.INSERT_REFERRAL_BONUS_QUERY,
+            (None, owner_telegram_id, referral_telegram_id, bonus, )
+        )
+        self.cursor.execute(
+            sql_queries.INSERT_WALLET_QUERY,
+            {"id": None, "owner_telegram_id": owner_telegram_id, "balance": bonus}
+        )
         self.connection.commit()
+
+    def sql_select_wallet_balance_by_owner_query(self, owner_telegram_id):
+        self.cursor.row_factory = lambda cursor, row: {
+            "id": row[0],
+            "owner_telegram_id": row[1],
+            "balance": row[2],
+        }
+        return self.cursor.execute(
+            sql_queries.SELECT_WALLET_BALANCE_BY_OWNER_QUERY,
+            (owner_telegram_id, )
+        ).fetchall()

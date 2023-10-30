@@ -56,6 +56,23 @@ async def reference_list_call(call: types.CallbackQuery):
         )
 
 
+async def wallet_balance_call(call: types.CallbackQuery):
+    balance = Database().sql_select_wallet_balance_by_owner_query(
+        owner_telegram_id=call.from_user.id
+    )
+
+    if balance:
+        await bot.send_message(
+            chat_id=call.from_user.id,
+            text=f"Your balance: {balance[0]['balance']}",
+        )
+    else:
+        await bot.send_message(
+            chat_id=call.from_user.id,
+            text=f"Invite someone to top up your wallet",
+        )
+
+
 def register_reference_menu_handlers(dp: Dispatcher):
     dp.register_callback_query_handler(reference_menu_call,
                                        lambda call: call.data == "reference_menu")
@@ -63,3 +80,5 @@ def register_reference_menu_handlers(dp: Dispatcher):
                                        lambda call: call.data == "reference_link")
     dp.register_callback_query_handler(reference_list_call,
                                        lambda call: call.data == "reference_list")
+    dp.register_callback_query_handler(wallet_balance_call,
+                                       lambda call: call.data == "wallet_balance")
