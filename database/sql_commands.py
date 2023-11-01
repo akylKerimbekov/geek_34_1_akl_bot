@@ -18,10 +18,14 @@ class Database:
         self.connection.execute(sql_queries.CREATE_LIKE_TABLE_QUERY)
         self.connection.execute(sql_queries.CREATE_REFERENCE_TABLE_QUERY)
         self.connection.execute(sql_queries.CREATE_NEWS_TABLE_QUERY)
+        self.connection.execute(sql_queries.CREATE_KEYWORD_TABLE_QUERY)
+        self.connection.execute(sql_queries.CREATE_KEY_NEWS_TABLE_QUERY)
         try:
             self.connection.execute(sql_queries.ALTER_USER_TABLE)
         except sqlite3.OperationalError as e:
             pass
+        self.sql_insert_key_word_query()
+
 
     def sql_insert_user_query(self, telegram_id, username, first_name, last_name):
         self.cursor.execute(
@@ -193,4 +197,35 @@ class Database:
         return self.cursor.execute(
             sql_queries.SELECT_ALL_FAV_NEWS_QUERY,
             (owner_telegram_id, )
+        ).fetchall()
+
+    def sql_insert_key_news_query(self, title, href):
+        self.cursor.execute(
+            sql_queries.INSERT_KEY_NEWS_QUERY,
+            (None, title, href, )
+        )
+        self.connection.commit()
+
+    def sql_insert_key_word_query(self):
+        self.cursor.execute(
+            sql_queries.INSERT_KEY_WORD_QUERY,
+        )
+        self.connection.commit()
+
+    def sql_select_all_keyword_query(self):
+        self.cursor.row_factory = lambda cursor, row: {
+            "word": row[0],
+        }
+        return self.cursor.execute(
+            sql_queries.SELECT_ALL_KEYWORD_QUERY,
+        ).fetchall()
+
+    def sql_select_top_5_key_news_query(self):
+        self.cursor.row_factory = lambda cursor, row: {
+            "id": row[0],
+            "title": row[1],
+            "href": row[2],
+        }
+        return self.cursor.execute(
+            sql_queries.SELECT_TOP_5_KEY_NEWS_QUERY,
         ).fetchall()

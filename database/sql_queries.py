@@ -65,6 +65,43 @@ CREATE_NEWS_TABLE_QUERY = """
     )
 """
 
+CREATE_KEYWORD_TABLE_QUERY = """
+    create table if not exists key_word(
+        word text,
+        unique(word)
+    )
+"""
+
+CREATE_KEY_NEWS_TABLE_QUERY = """
+    create table if not exists key_news(
+        id integer primary key,
+        title text,
+        href text,
+        unique(title, href)
+    )
+"""
+
+INSERT_KEY_WORD_QUERY = """
+    insert or ignore into key_word 
+    select 'eu' union all
+    select 'usa' union all
+    select 'u.s.' union all
+    select 'nasdaq' union all
+    select 'tesla'
+"""
+
+INSERT_KEY_NEWS_QUERY = """
+    insert into key_news values (?, ?, ?)
+"""
+
+SELECT_TOP_5_KEY_NEWS_QUERY = """
+    select * from key_news limit 5
+"""
+
+SELECT_ALL_KEYWORD_QUERY = """
+    select * from key_word
+"""
+
 INSERT_NEWS_QUERY = """
     insert into news values (?, ?, ?, ?, ?)
     returning *

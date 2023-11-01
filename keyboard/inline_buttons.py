@@ -31,6 +31,10 @@ async def start_keyboard():
         "Favorite News",
         callback_data="fav_news_list_menu"
     )
+    key_news_list_menu_button = InlineKeyboardButton(
+        "Key News",
+        callback_data="key_news_list_menu"
+    )
     markup.add(questionnaire_button)
     markup.add(registration_button)
     markup.add(profile_button)
@@ -38,6 +42,7 @@ async def start_keyboard():
     markup.add(reference_menu_button)
     markup.add(news_list_menu_button)
     markup.add(fav_news_list_menu_button)
+    markup.add(key_news_list_menu_button)
     return markup
 
 

@@ -52,6 +52,18 @@ async def fav_news_list_menu_call(call: types.CallbackQuery):
             )
 
 
+async def key_news_list_menu_call(call: types.CallbackQuery):
+    print('key_news_list_menu_call')
+    key_news = Database().sql_select_top_5_key_news_query()
+    print(key_news)
+    if key_news:
+        for news in key_news:
+            await bot.send_message(
+                chat_id=call.from_user.id,
+                text=news["title"],
+            )
+
+
 def register_news_menu_handlers(dp: Dispatcher):
     dp.register_callback_query_handler(news_list_menu_call,
                                        lambda call: call.data == "news_list_menu")
@@ -59,3 +71,5 @@ def register_news_menu_handlers(dp: Dispatcher):
                                        lambda call: "update_news_link_" in call.data)
     dp.register_callback_query_handler(fav_news_list_menu_call,
                                        lambda call: call.data == "fav_news_list_menu")
+    dp.register_callback_query_handler(key_news_list_menu_call,
+                                       lambda call: call.data == "key_news_list_menu")
